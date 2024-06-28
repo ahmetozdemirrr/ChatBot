@@ -8,8 +8,21 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - ask_best_proglang
+  - ask_clothing_advice
+  - inform_mood
 
 responses:
+
+  utter_ask_mood:
+  - text: "Sure, for better advice how are you feeling today?"
+
+  utter_clothing_advice:
+  - text: "Based on your mood, people usually wear {colors}. You can try a combination with these colors!"
+
+  utter_best_language:
+  - text: "Absolutely C"
+  
   utter_greet:
   - text: "Hey! How are you?"
 
@@ -28,6 +41,16 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+
+slots:
+  mood:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_text
+
+actions:
+  - action_clothing_advice
 
 session_config:
   session_expiration_time: 60

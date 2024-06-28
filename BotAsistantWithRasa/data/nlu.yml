@@ -1,6 +1,29 @@
 version: "3.1"
 
 nlu:
+
+- intent: ask_clothing_advice
+  examples: |
+    - Help me with my outfit
+    - What should I wear today?
+    - Can you give me clothing advice?
+    - I need help with my clothing
+    - What should I wear based on my mood?
+
+- intent: inform_mood
+  examples: |
+    - I am feeling happy
+    - I feel sad
+    - I am excited
+    - I am nervous
+    - I am calm
+      
+- intent: ask_best_proglang
+  examples: |
+    - What is the best programming language?
+    - which programming language is the best?
+    - What is the top programming language?
+
 - intent: greet
   examples: |
     - hey

@@ -2,6 +2,21 @@ version: "3.1"
 
 rules:
 
+- rule: Ask for mood before giving clothing advice
+  steps:
+  - intent: ask_clothing_advice
+  - action: utter_ask_mood
+
+- rule: Provide clothing advice based on mood
+  steps:
+  - intent: inform_mood
+  - action: action_clothing_advice
+      
+- rule:
+  steps:
+  - intent: ask_best_proglang
+  - action: utter_best_language
+  
 - rule: Say goodbye anytime the user says goodbye
   steps:
   - intent: goodbye
