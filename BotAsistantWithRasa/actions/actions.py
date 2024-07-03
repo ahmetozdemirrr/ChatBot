@@ -76,3 +76,24 @@ class ActionClothingAdvice(Action):
         return [SlotSet("mood", mood)]
 
 
+class ActionGreetUser(Action):
+
+    def name(self) -> Text:
+        return "action_greet_user"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        name = tracker.get_slot('name')
+
+        # Debugging: Print the value of the 'name' slot
+        print(f"DEBUG: Name slot value is: {name}")
+
+        if name:
+            dispatcher.utter_message(response="utter_greet_user", name=name)
+        else:
+            dispatcher.utter_message(response="utter_ask_name")
+
+        return [SlotSet("name", name)]
+

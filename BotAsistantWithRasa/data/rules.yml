@@ -12,6 +12,12 @@ rules:
   - intent: inform_mood
   - action: action_clothing_advice
       
+- rule: Ask for name at the beginning
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: utter_ask_name
+
 - rule:
   steps:
   - intent: ask_best_proglang

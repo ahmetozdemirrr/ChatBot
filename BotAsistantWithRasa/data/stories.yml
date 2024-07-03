@@ -2,22 +2,33 @@ version: "3.1"
 
 stories:
 
+- story: Greet and ask for user's name
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: utter_ask_name
+  - intent: inform_name
+  - action: action_greet_user
+
 - story: Provide clothing advice
   steps:
   - intent: ask_clothing_advice
   - action: utter_ask_mood
   - intent: inform_mood
   - action: action_clothing_advice
-      
+
 - story: respond the best language question
   steps:
   - intent: ask_best_proglang
   - action: utter_best_language
-  
+
 - story: happy path
   steps:
   - intent: greet
   - action: utter_greet
+  - action: utter_ask_name
+  - intent: inform_name
+  - action: action_greet_user
   - intent: mood_great
   - action: utter_happy
 
@@ -25,6 +36,9 @@ stories:
   steps:
   - intent: greet
   - action: utter_greet
+  - action: utter_ask_name
+  - intent: inform_name
+  - action: action_greet_user
   - intent: mood_unhappy
   - action: utter_cheer_up
   - action: utter_did_that_help
@@ -35,6 +49,9 @@ stories:
   steps:
   - intent: greet
   - action: utter_greet
+  - action: utter_ask_name
+  - intent: inform_name
+  - action: action_greet_user
   - intent: mood_unhappy
   - action: utter_cheer_up
   - action: utter_did_that_help

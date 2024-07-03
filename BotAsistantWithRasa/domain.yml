@@ -11,8 +11,15 @@ intents:
   - ask_best_proglang
   - ask_clothing_advice
   - inform_mood
+  - inform_name
 
 responses:
+
+  utter_ask_name:
+  - text: "What is your name?"
+
+  utter_greet_user:
+  - text: "Nice to meet you, {name}! How can I help you?"
 
   utter_ask_mood:
   - text: "Sure, for better advice how are you feeling today?"
@@ -42,15 +49,26 @@ responses:
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
 
+entities:
+  - name
+  
 slots:
   mood:
     type: text
     influence_conversation: true
     mappings:
-    - type: from_text
+      - type: from_text
+
+  name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: name
 
 actions:
   - action_clothing_advice
+  - action_greet_user
 
 session_config:
   session_expiration_time: 60

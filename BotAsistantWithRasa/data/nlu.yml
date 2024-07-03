@@ -17,7 +17,20 @@ nlu:
     - I am excited
     - I am nervous
     - I am calm
-      
+
+- intent: inform_name
+  examples: |
+    - My name is [John](name)
+    - It's [Alice](name)
+    - Call me [Bob](name)
+    - I am [Charlie](name)
+    - [Eve](name)
+    - My name is [Ahmet](name)
+    - I am [Esma](name)
+    - It's [David](name)
+    - Call me [Nina](name)
+    - [Sarah](name)
+        
 - intent: ask_best_proglang
   examples: |
     - What is the best programming language?
