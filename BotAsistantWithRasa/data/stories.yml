@@ -2,6 +2,11 @@ version: "3.1"
 
 stories:
 
+- story: Respond with favorite color for product
+  steps:
+  - intent: ask_product_color
+  - action: action_favorite_color
+
 - story: Greet and ask for user's name
   steps:
   - intent: greet

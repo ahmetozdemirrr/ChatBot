@@ -2,6 +2,28 @@ version: "3.1"
 
 nlu:
 
+- regex: product
+  examples: |
+    - T-Shirt
+    - Pantolon
+    - Ceket
+    - Elbise
+    - Gömlek
+    - Çorap
+
+- intent: ask_product_color
+  examples: |
+    - Which color is most preferred for [T-Shirt](product)?
+    - Which color is really most preferred for [T-Shirt](product)?
+    - What is the favorite color for [Pantolon](product)?
+    - What is the most favorite color for [Pantolon](product)?
+    - Tell me the favorite color for [Ceket](product)
+    - Tell me the most favorite color for [Ceket](product)
+    - What is the most popular color for [Elbise](product)?
+    - What is the most popular color for this [Elbise](product)?
+    - Which color do people like most for [Gömlek](product)?
+    - Which best color do people like most for [Gömlek](product)?
+
 - intent: ask_clothing_advice
   examples: |
     - Help me with my outfit

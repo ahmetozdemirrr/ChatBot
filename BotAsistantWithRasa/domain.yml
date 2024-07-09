@@ -12,8 +12,12 @@ intents:
   - ask_clothing_advice
   - inform_mood
   - inform_name
+  - ask_product_color
 
 responses:
+
+  utter_favorite_color:
+  - text: "Which color do you prefer for this product?"
 
   utter_ask_name:
   - text: "What is your name?"
@@ -51,8 +55,10 @@ responses:
 
 entities:
   - name
-  
+  - product 
+
 slots:
+  
   mood:
     type: text
     influence_conversation: true
@@ -66,10 +72,18 @@ slots:
     - type: from_entity
       entity: name
 
+  product:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: product
+
 actions:
   - action_clothing_advice
   - action_greet_user
+  - action_favorite_color
 
-session_config:
+session_configa:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
