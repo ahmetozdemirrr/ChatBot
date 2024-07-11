@@ -1,7 +1,6 @@
 version: "3.1"
 
 stories:
-
 - story: Respond with favorite color for product
   steps:
   - intent: ask_product_color
@@ -62,3 +61,33 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+- story: Yeni sezon ürünleri bilgisi alma
+  steps:
+  - intent: request_new_season_products
+  - action: new_season_products_form
+  - active_loop: new_season_products_form
+  - intent: inform
+    entities:
+      - product: "pantolon"
+  - action: new_season_products_form
+  - active_loop: new_season_products_form
+  - intent: inform
+    entities:
+      - size: "large"
+  - action: new_season_products_form
+  - active_loop: new_season_products_form
+  - intent: inform
+    entities:
+      - color: "beyaz"
+  - action: new_season_products_form
+  - active_loop: new_season_products_form
+  - intent: inform
+    entities:
+      - material: "pamuklu"
+  - action: new_season_products_form
+  - active_loop: new_season_products_form
+  - active_loop: null
+  - action: action_submit_new_season_products_form
+  - intent: affirm
+  - action: utter_thanks

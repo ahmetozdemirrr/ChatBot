@@ -13,9 +13,75 @@ intents:
   - inform_mood
   - inform_name
   - ask_product_color
+  - request_new_season_products
+  - inform
+
+entities:
+  - name
+  - product
+  - size
+  - color
+  - material
+  - feedback
+
+slots:
+  mood:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+
+  name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: name
+
+  product:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: product
+
+  size:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: size
+
+  color:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: color
+
+  material:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: material
+
+  feedback:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+
+forms:
+  new_season_products_form:
+    required_slots:
+      - product
+      - size
+      - color
+      - material
+      - feedback
 
 responses:
-
   utter_favorite_color:
   - text: "Which color do you prefer for this product?"
 
@@ -53,37 +119,34 @@ responses:
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
 
-entities:
-  - name
-  - product 
+  utter_ask_product:
+    - text: "Hangi tür giyim ürünleri arıyorsunuz? (örneğin, tişört, ceket, pantolon)"
 
-slots:
-  
-  mood:
-    type: text
-    influence_conversation: true
-    mappings:
-      - type: from_text
+  utter_ask_size:
+    - text: "Kaç beden giyiyorsunuz?"
 
-  name:
-    type: text
-    influence_conversation: true
-    mappings:
-    - type: from_entity
-      entity: name
+  utter_ask_color:
+    - text: "Hangi renklerde {product} tercih edersiniz?"
 
-  product:
-    type: text
-    influence_conversation: true
-    mappings:
-    - type: from_entity
-      entity: product
+  utter_ask_material:
+    - text: "Başka bir tercihiniz veya özel isteğiniz var mı? (örneğin, pamuklu kumaş, baskılı vs.)"
+
+  utter_ask_feedback:
+    - text: "Son olarak, bize geri bildirimde bulunmak ister misiniz?"
+
+  utter_confirm_preferences:
+    - text: "Tercihleriniz: {size} beden, {color} renklerde, {material} tişörtler. Doğru mu?"
+
+  utter_thanks:
+    - text: "Teşekkürler!"
 
 actions:
   - action_clothing_advice
   - action_greet_user
   - action_favorite_color
+  - validate_new_season_products_form
+  - action_submit_new_season_products_form
 
-session_configa:
+session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

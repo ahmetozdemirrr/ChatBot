@@ -1,7 +1,6 @@
 version: "3.1"
 
 nlu:
-
 - regex: product
   examples: |
     - T-Shirt
@@ -10,6 +9,38 @@ nlu:
     - Elbise
     - Gömlek
     - Çorap
+
+- regex: size
+  examples: |
+    - small 
+    - medium 
+    - large 
+    - xl 
+    - xxl
+
+- regex: color
+  examples: |
+    - kırmızı 
+    - sarı 
+    - mavi 
+    - siyah 
+    - beyaz
+    - mor
+    - yeşil
+    - ekru
+    - bej
+    - kahverengi
+
+- regex: material
+  examples: |
+    - pamuklu
+    - polyester
+    - kot
+    - keten
+    - kadife
+    - kumaş
+    - yün
+    - ipek
 
 - intent: ask_product_color
   examples: |
@@ -91,6 +122,7 @@ nlu:
 - intent: affirm
   examples: |
     - yes
+    - evet
     - y
     - indeed
     - of course
@@ -100,6 +132,7 @@ nlu:
 - intent: deny
   examples: |
     - no
+    - hayır
     - n
     - never
     - I don't think so
@@ -147,3 +180,16 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+- intent: request_new_season_products
+  examples: |
+    - yeni sezon ürünleri hakkında bilgi almak istiyorum
+    - yeni sezon ürünleri var mı?
+    - yeni sezon ürünleri nelerdir?
+
+- intent: inform
+  examples: |
+    - [tişört](product) arıyorum
+    - [Medium](size) beden
+    - [siyah](color) ve [beyaz](color)
+    - [pamuklu](material) olsun lütfen

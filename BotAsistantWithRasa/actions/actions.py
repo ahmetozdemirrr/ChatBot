@@ -33,6 +33,8 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
+from rasa_sdk.forms import FormValidationAction
+
 
 def create_db_from_sql(db_path, sql_file_path):
 
@@ -58,6 +60,7 @@ def create_db_from_sql(db_path, sql_file_path):
 
     conn.close()
 
+
 def read_db_to_dataframe(db_path, query):
 
     conn = sqlite3.connect(db_path)
@@ -65,6 +68,7 @@ def read_db_to_dataframe(db_path, query):
     conn.close()
 
     return df
+
 
 def find_favorite_color(row):
 
@@ -74,15 +78,20 @@ def find_favorite_color(row):
 
     return pd.Series([favorite_color, favorite_amount], index=['Renk', 'Miktar'])
 
+
 def generate_sentences(df):
 
     return df.apply(lambda x : f"{x.name} kategorisinde en çok tercih edilen renk {x['Renk']} rengidir.", axis = 1)
 
+
+
 class ActionFavoriteColor(Action):
+
 
     def name(self) -> Text:
 
         return "action_favorite_color"
+
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
@@ -92,7 +101,7 @@ class ActionFavoriteColor(Action):
 
         if not product:
 
-            dispatcher.utter_message(text="Lütfen bir ürün adı belirtin.")
+            dispatcher.utter_message(text="Please specify a product name.")
             return []
 
         # Veritabanı ve SQL dosya yolları
@@ -110,20 +119,23 @@ class ActionFavoriteColor(Action):
 
             product_df = df[df['Urun'] == product]
             favorite_color_info = product_df.apply(find_favorite_color, axis=1).iloc[0]
-            response = f"{product} kategorisinde en çok tercih edilen renk {favorite_color_info['Renk']} rengidir."
+            response = f"The most preferred color in {product} category is {favorite_color_info['Renk']}."
         
         else:
-            response = f"{product} kategorisi için bilgi bulunamadı."
+            response = f"No information found for category {product}."
 
         dispatcher.utter_message(text=response)
         return []
 
 
+
 class ActionClothingAdvice(Action):
+
 
     def name(self) -> Text:
 
         return "action_clothing_advice"
+
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
@@ -171,14 +183,18 @@ class ActionClothingAdvice(Action):
         return [SlotSet("mood", mood)]
 
 
+
 class ActionGreetUser(Action):
+
 
     def name(self) -> Text:
 
         return "action_greet_user"
 
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        print(f"selam")
         name = tracker.get_slot('name')
 
         # Debugging: Print the value of the 'name' slot
@@ -191,4 +207,83 @@ class ActionGreetUser(Action):
             dispatcher.utter_message(response="utter_ask_name")
 
         return [SlotSet("name", name)]
+
+
+
+class ValidateNewSeasonProductsForm(FormValidationAction):
+
+
+    def name(self) -> Text:
+
+        return "validate_new_season_products_form"
+
+
+    def validate_product(self, slot_value: Any, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> Dict[Text, Any]:
+        
+        if slot_value.lower() in ["tişört", "ceket", "pantolon", "elbise", "gömlek", "çorap"]:
+            
+            return {"product": slot_value}
+        
+        dispatcher.utter_message(text="Geçersiz giyim türü. Lütfen tişört, ceket, pantolon, elbise, gömlek veya çorap seçin.")
+        
+        return {"product": None}
+
+
+    def validate_size(self, slot_value: Any, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> Dict[Text, Any]:
+        
+        if slot_value.lower() in ["small", "medium", "large", "xl", "xxl"]:
+            
+            return {"size": slot_value}
+        
+        dispatcher.utter_message(text="Geçersiz beden. Lütfen small, medium, large, xl veya xxl seçin.")
+        
+        return {"size": None}
+
+
+    def validate_color(self, slot_value: Any, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> Dict[Text, Any]:
+        
+        if slot_value.lower() in ["siyah", "beyaz", "kırmızı", "mavi", "yeşil", "sarı"]:
+            
+            return {"color": slot_value}
+       
+        dispatcher.utter_message(text="Geçersiz renk. Lütfen siyah, beyaz, kırmızı, mavi, yeşil veya sarı seçin.")
+        
+        return {"color": None}
+
+
+    def validate_material(self, slot_value: Any, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> Dict[Text, Any]:
+        
+        if slot_value.lower() in ["pamuklu", "polyester", "yün", "ipek"]:
+            
+            return {"material": slot_value}
+       
+        dispatcher.utter_message(text="Geçersiz kumaş türü. Lütfen pamuklu, polyester, yün veya ipek seçin.")
+       
+        return {"material": None}
+
+
+    def validate_feedback(self, slot_value: Any, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> Dict[Text, Any]:
+
+        return {"feedback": slot_value}
+
+
+
+class ActionSubmitNewSeasonProductsForm(Action):
+
+
+    def name(self) -> Text:
+
+        return "action_submit_new_season_products_form"
+
+
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        product = tracker.get_slot('product')
+        size = tracker.get_slot('size')
+        color = tracker.get_slot('color')
+        material = tracker.get_slot('material')
+
+        dispatcher.utter_message(text=f"Tercihleriniz: {size} beden, {color} renklerde, {material} {product}. Doğru mu?")
+        
+        return []
 

@@ -1,7 +1,6 @@
 version: "3.1"
 
 rules:
-
 - rule: Provide favorite color for product
   steps:
   - intent: ask_product_color
@@ -37,3 +36,20 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Activate new season products form
+  steps:
+  - intent: request_new_season_products
+  - action: new_season_products_form
+  - active_loop: new_season_products_form
+
+- rule: Submit new season products form
+  condition:
+  - active_loop: new_season_products_form
+  steps:
+  - action: new_season_products_form
+  - active_loop: null
+  - action: action_submit_new_season_products_form
+  - intent: affirm
+  - action: utter_thanks
+  
