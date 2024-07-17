@@ -15,6 +15,7 @@ intents:
   - ask_product_color
   - request_new_season_products
   - inform
+  - ask_product_location
 
 entities:
   - name
@@ -23,6 +24,10 @@ entities:
   - color
   - material
   - feedback
+  - kesim
+  - shoe_size
+  - section_name
+  - price
 
 slots:
   mood:
@@ -66,11 +71,39 @@ slots:
       - type: from_entity
         entity: material
 
+  kesim:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: kesim
+
+  shoe_size:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: shoe_size
+
   feedback:
     type: text
     influence_conversation: true
     mappings:
       - type: from_text
+
+  section_name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: section_name
+  
+  price:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: price
 
 forms:
   new_season_products_form:
@@ -82,6 +115,23 @@ forms:
       - feedback
 
 responses:
+
+  utter_ask_shelf_location:
+    - text: "Aradığınız ürün {section_name} reyonunda, {aisle_num} koridorunda, {side} tarafında, {shelf_num} rafında bulunuyor."
+    - text: "Üzgünüm, aradığınız özelliklerde bir ürün bulamadım."
+
+  utter_ask_section_name:
+  - text: "Hangi reyonda arama yapmamı istersiniz?"
+    buttons:
+    - title: "Erkek"
+      payload: '/ask_product_location{{"section_name": "erkek"}}'
+    - title: "Kadın"
+      payload: '/ask_product_location{{"section_name": "kadın"}}'
+    - title: "Çocuk"
+      payload: '/ask_product_location{{"section_name": "çocuk"}}'
+    - title: "Unisex"
+      payload: '/ask_product_location{{"section_name": "unisex"}}'
+
   utter_favorite_color:
   - text: "Which color do you prefer for this product?"
 
@@ -146,6 +196,7 @@ actions:
   - action_favorite_color
   - validate_new_season_products_form
   - action_submit_new_season_products_form
+  - action_find_product_location
 
 session_config:
   session_expiration_time: 60

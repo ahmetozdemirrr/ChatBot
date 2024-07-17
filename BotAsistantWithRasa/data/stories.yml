@@ -91,3 +91,10 @@ stories:
   - action: action_submit_new_season_products_form
   - intent: affirm
   - action: utter_thanks
+
+- story: find product location
+  steps:
+  - intent: ask_product_location
+  - action: action_find_product_location
+  - slot_was_set:
+      - section_name: "erkek"

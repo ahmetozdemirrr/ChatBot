@@ -1,29 +1,48 @@
 version: "3.1"
 
 nlu:
+
 - regex: product
   examples: |
-    - T-Shirt
     - Pantolon
-    - Ceket
-    - Elbise
+    - Jean
+    - Kazak
+    - Tişört
     - Gömlek
+    - Ayakkabı
     - Çorap
+    - Atkı
+    - Şapka
+    - Ceket
+    - Mont
+    - Bot
+    - Pijama
+    - Eşofman
+    - Saat
+    - Parfüm
 
 - regex: size
   examples: |
-    - small 
-    - medium 
-    - large 
-    - xl 
+    - small
+    - medium
+    - large
+    - xl
     - xxl
+
+- regex: shoe_size
+  examples: |
+    - 36
+    - 38
+    - 40
+    - 42
+    - 44
 
 - regex: color
   examples: |
-    - kırmızı 
-    - sarı 
-    - mavi 
-    - siyah 
+    - kırmızı
+    - sarı
+    - mavi
+    - siyah
     - beyaz
     - mor
     - yeşil
@@ -41,6 +60,24 @@ nlu:
     - kumaş
     - yün
     - ipek
+
+- regex: kesim
+  examples: |
+    - bol
+    - dar
+    - normal
+
+- regex: marka
+  examples: |
+    - markaA
+    - markaB
+    - marlaC
+
+- regex: esans 
+  examples: |
+    - çiçeksi
+    - odunsu
+    - baharatlı
 
 - intent: ask_product_color
   examples: |
@@ -193,3 +230,11 @@ nlu:
     - [Medium](size) beden
     - [siyah](color) ve [beyaz](color)
     - [pamuklu](material) olsun lütfen
+
+- intent: ask_product_location
+  examples: |
+    - [mavi](color) renginde [bol](kesim) kesim [pamuk](material) kumaşlı [medium](size) beden [pantolon](product) [erkek](section_name) nerede?
+    - [kadın](section_name) reyonundaki [bol](kesim) kesim [kırmızı](color) [pamuk](material) [pantolon](product) nerede bulabilirim?
+    - [siyah](color) [polyester](material) [jean](product) nerede?
+    - [beyaz](color) [dar](kesim) [keten](material) [gömlek](product) nerede bulunur?
+    - [kırmızı](color) [dar](kesim) [polyester](material) kumaşlı [large](size) beden [tişört](product) nerede?
