@@ -1,10 +1,6 @@
 version: "3.1"
 
 rules:
-- rule: Provide favorite color for product
-  steps:
-  - intent: ask_product_color
-  - action: action_favorite_color
 
 - rule: Ask for mood before giving clothing advice
   steps:
@@ -16,31 +12,31 @@ rules:
   - intent: inform_mood
   - action: action_clothing_advice
       
-- rule: Greet user and ask for name
+- rule: Greet user and ask for name if not known
+  condition:
+  - slot_was_set:
+    - name : null
   steps:
   - intent: greet
-  - action: utter_greet
   - action: utter_ask_name
+
+- rule: Greet user if name is known
+  condition:
+  - slot_was_set:
+    - name
+  steps:
+  - intent: greet
+  - action: utter_greet_for_known_name
 
 - rule: Respond to name
   steps:
   - intent: inform_name
   - action: action_greet_user
 
-- rule:
+- rule: Best mall center of home
   steps:
-  - intent: ask_best_proglang
-  - action: utter_best_language
-  
-- rule: Say goodbye anytime the user says goodbye
-  steps:
-  - intent: goodbye
-  - action: utter_goodbye
-
-- rule: Say 'I am a bot' anytime the user challenges
-  steps:
-  - intent: bot_challenge
-  - action: utter_iamabot
+  - intent: ask_best_mall
+  - action: utter_best_mall
 
 - rule: Activate new season products form
   steps:
@@ -57,10 +53,15 @@ rules:
   - action: action_submit_new_season_products_form
   - intent: affirm
   - action: utter_thanks
-  
-- rule: Find product location
+
+- rule: Find product location in koctas
   steps:
-  - intent: ask_product_location
-  - action: action_find_product_location
+  - intent: ask_product_location_koctas
+  - action: action_find_product_location_koctas
   - slot_was_set:
-      - section_name
+      - campaign_ok
+
+- rule: Handle empty messages
+  steps:
+    - intent: empty_message
+    - action: action_listen_for_non_empty_message

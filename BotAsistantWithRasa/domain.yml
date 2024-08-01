@@ -1,5 +1,7 @@
 version: "3.1"
 
+
+
 intents:
   - greet
   - goodbye
@@ -8,14 +10,15 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
-  - ask_best_proglang
+  - ask_best_mall
   - ask_clothing_advice
   - inform_mood
   - inform_name
-  - ask_product_color
   - request_new_season_products
-  - inform
-  - ask_product_location
+  - inform_new_season_products
+  - ask_product_location_koctas
+  - empty_message
+
 
 entities:
   - name
@@ -28,6 +31,17 @@ entities:
   - shoe_size
   - section_name
   - price
+  - campaign_ok
+  - koctas_product
+  - koctas_product_color
+  - koctas_product_size
+  - koctas_product_weight
+  - koctas_product_price
+  - koctas_product_warranty
+  - koctas_product_campaign
+  - koctas_section_name
+
+
 
 slots:
   mood:
@@ -105,6 +119,62 @@ slots:
       - type: from_entity
         entity: price
 
+  koctas_product:  
+    type: text 
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: koctas_product    
+
+  koctas_product_weight:  
+    type: text 
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: koctas_product_weight 
+
+  koctas_product_size:  
+    type: text 
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: koctas_product_size 
+
+  koctas_product_price:  
+    type: text 
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: koctas_product_price 
+
+  koctas_product_warranty:  
+    type: text 
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: koctas_product_warranty 
+
+  koctas_product_campaign:  
+    type: text 
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: koctas_product_campaign 
+
+  koctas_product_color:  
+    type: text 
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: koctas_product_color 
+
+  campaign_ok:  
+    type: text 
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: campaign_ok 
+
 forms:
   new_season_products_form:
     required_slots:
@@ -114,32 +184,33 @@ forms:
       - material
       - feedback
 
+
+
 responses:
 
-  utter_ask_shelf_location:
-    - text: "Aradığınız ürün {section_name} reyonunda, {aisle_num} koridorunda, {side} tarafında, {shelf_num} rafında bulunuyor."
+  utter_ask_koctas_product_location:
+    - text: "Aradığınız ürün {koctas_section_name} reyonunda, {koctas_aisle_num} koridorunda, {koctas_side} tarafında, {koctas_shelf_num} rafında bulunuyor."
     - text: "Üzgünüm, aradığınız özelliklerde bir ürün bulamadım."
 
-  utter_ask_section_name:
-  - text: "Hangi reyonda arama yapmamı istersiniz?"
+  utter_ask_koctas_campaign:
+  - text: "Kampanyalı ürünlere bakmak ister misiniz?"
     buttons:
-    - title: "Erkek"
-      payload: '/ask_product_location{{"section_name": "erkek"}}'
-    - title: "Kadın"
-      payload: '/ask_product_location{{"section_name": "kadın"}}'
-    - title: "Çocuk"
-      payload: '/ask_product_location{{"section_name": "çocuk"}}'
-    - title: "Unisex"
-      payload: '/ask_product_location{{"section_name": "unisex"}}'
+    - title: "Evet"
+      payload: '/ask_product_location_koctas{{"campaign_ok": "evet"}}'
+    - title: "Hayır"
+      payload: '/ask_product_location_koctas{{"campaign_ok": "hayır"}}'
 
   utter_favorite_color:
   - text: "Which color do you prefer for this product?"
 
   utter_ask_name:
-  - text: "What is your name?"
+  - text: "Selam, adın ne?"
 
   utter_greet_user:
-  - text: "Nice to meet you, {name}! How can I help you?"
+  - text: "Memnun oldum, {name}! Sana nasıl yardımcı olabilirim?"
+
+  utter_greet_for_known_name:
+  - text: "Merhaba tekrardan, sana nasıl yardımcı olabilirim?"
 
   utter_ask_mood:
   - text: "Sure, for better advice how are you feeling today?"
@@ -147,27 +218,8 @@ responses:
   utter_clothing_advice:
   - text: "Based on your mood, people usually wear {colors}. You can try a combination with these colors!"
 
-  utter_best_language:
-  - text: "Absolutely C"
-  
-  utter_greet:
-  - text: "Hey! How are you?"
-
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
-
-  utter_goodbye:
-  - text: "Bye"
-
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+  utter_best_mall:
+  - text: "En iyi tercih koçtaş olacaktır. Size nasıl bir hizmet sunmamı istersiniz?"
 
   utter_ask_product:
     - text: "Hangi tür giyim ürünleri arıyorsunuz? (örneğin, tişört, ceket, pantolon)"
@@ -193,10 +245,10 @@ responses:
 actions:
   - action_clothing_advice
   - action_greet_user
-  - action_favorite_color
   - validate_new_season_products_form
   - action_submit_new_season_products_form
-  - action_find_product_location
+  - action_find_product_location_koctas
+  - action_listen_for_non_empty_message
 
 session_config:
   session_expiration_time: 60

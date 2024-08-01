@@ -37,95 +37,124 @@ from rasa_sdk.events import SlotSet, FollowupAction
 from rasa_sdk.forms import FormValidationAction
 from pymongo import MongoClient
 
-def create_db_from_sql(db_path, sql_file_path):
+# bu kısım bir sql database'i kurgulanmış ve burada kullanıcının talimatıyla 
+# belieli ürünlerde kategorilere göre en çok tercih edilen ürün hangisiyse
+# onun istatistikleri getirilir...
+# bizim senaryomuzda sql olmayacağı için burayı yoruma alıyorum.
+# bu kısıım belki koctas için kurgulanabilir
+#
+#
+# def create_db_from_sql(db_path, sql_file_path):
 
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+#     conn = sqlite3.connect(db_path)
+#     cursor = conn.cursor()
     
-    # Tablo varsa oluşturmadan geç
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Alisveris'")
-    result = cursor.fetchone()
+#     # Tablo varsa oluşturmadan geç
+#     cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Alisveris'")
+#     result = cursor.fetchone()
 
-    if not result:
+#     if not result:
 
-        with open(sql_file_path, 'r') as file:
+#         with open(sql_file_path, 'r') as file:
 
-            sql_script = file.read()
+#             sql_script = file.read()
         
-        cursor.executescript(sql_script)
-        conn.commit()
+#         cursor.executescript(sql_script)
+#         conn.commit()
 
-    else:
+#     else:
 
-        print("Table 'Alisveris' already exists, skipping creation.")
+#         print("Table 'Alisveris' already exists, skipping creation.")
 
-    conn.close()
-
-
-def read_db_to_dataframe(db_path, query):
-
-    conn = sqlite3.connect(db_path)
-    df = pd.read_sql_query(query, conn)
-    conn.close()
-
-    return df
+#     conn.close()
 
 
-def find_favorite_color(row):
+# def read_db_to_dataframe(db_path, query):
 
-    colors = row[['Kirmizi', 'Mavi', 'Yesil', 'Sari']]
-    favorite_color = colors.idxmax()  # En yüksek değere sahip rengi bul
-    favorite_amount = colors.max()    # O rengin miktarını bul
+#     conn = sqlite3.connect(db_path)
+#     df = pd.read_sql_query(query, conn)
+#     conn.close()
 
-    return pd.Series([favorite_color, favorite_amount], index=['Renk', 'Miktar'])
-
-
-def generate_sentences(df):
-
-    return df.apply(lambda x : f"{x.name} kategorisinde en çok tercih edilen renk {x['Renk']} rengidir.", axis = 1)
+#     return df
 
 
+# def find_favorite_color(row):
 
-class ActionFavoriteColor(Action):
+#     colors = row[['Kirmizi', 'Mavi', 'Yesil', 'Sari']]
+#     favorite_color = colors.idxmax()  # En yüksek değere sahip rengi bul
+#     favorite_amount = colors.max()    # O rengin miktarını bul
+
+#     return pd.Series([favorite_color, favorite_amount], index=['Renk', 'Miktar'])
 
 
-    def name(self) -> Text:
+# def generate_sentences(df):
 
-        return "action_favorite_color"
+#     return df.apply(lambda x : f"{x.name} kategorisinde en çok tercih edilen renk {x['Renk']} rengidir.", axis = 1)
 
 
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+# class ActionFavoriteColor(Action):
+
+
+#     def name(self) -> Text:
+
+#         return "action_favorite_color"
+
+
+#     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        # Slottan 'product' değerini al
-        product = tracker.get_slot('product')
-        print(f"DEBUG: Product slot value is: {product}")
+#         # Slottan 'product' değerini al
+#         product = tracker.get_slot('product')
+#         print(f"DEBUG: Product slot value is: {product}")
 
-        if not product:
+#         if not product:
 
-            dispatcher.utter_message(text="Please specify a product name.")
-            return []
+#             dispatcher.utter_message(text="Please specify a product name.")
+#             return []
 
-        # Veritabanı ve SQL dosya yolları
-        db_path = 'example.db'
-        sql_file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'veritabani.sql')
+#         # Veritabanı ve SQL dosya yolları
+#         db_path = 'example.db'
+#         sql_file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'veritabani.sql')
 
-        # Veritabanını oluştur veya veriyi yükle
-        create_db_from_sql(db_path, sql_file_path)
+#         # Veritabanını oluştur veya veriyi yükle
+#         create_db_from_sql(db_path, sql_file_path)
 
-        # Veriyi DataFrame'e çevir
-        df = read_db_to_dataframe(db_path, "SELECT * FROM Alisveris")
+#         # Veriyi DataFrame'e çevir
+#         df = read_db_to_dataframe(db_path, "SELECT * FROM Alisveris")
 
-        # Ürüne göre en çok tercih edilen rengi bul
-        if product in df['Urun'].values:
+#         # Ürüne göre en çok tercih edilen rengi bul
+#         if product in df['Urun'].values:
 
-            product_df = df[df['Urun'] == product]
-            favorite_color_info = product_df.apply(find_favorite_color, axis=1).iloc[0]
-            response = f"The most preferred color in {product} category is {favorite_color_info['Renk']}."
+#             product_df = df[df['Urun'] == product]
+#             favorite_color_info = product_df.apply(find_favorite_color, axis=1).iloc[0]
+#             response = f"The most preferred color in {product} category is {favorite_color_info['Renk']}."
         
-        else:
-            response = f"No information found for category {product}."
+#         else:
+#             response = f"No information found for category {product}."
 
-        dispatcher.utter_message(text=response)
+#         dispatcher.utter_message(text=response)
+#         return []
+
+
+
+# ekrana bir mesaja basmadan entera basılırsa bu aksiyon bir şey yapılmamasını sağlaycak...
+
+class ActionListenForNonEmptyMessage(Action): 
+
+    def name(self) -> str:
+
+        return "action_listen_for_non_empty_message"
+
+    async def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict) -> List[Dict]:
+
+        last_message = tracker.latest_message.get("text", "").strip()
+
+        if not last_message:
+
+            print(f"DEBUG: typing empty message")
+            # Eğer mesaj boşsa veya sadece boşluksa, tepki vermeden geri dön
+            return [UserUtteranceReverted()]
+
         return []
 
 
@@ -194,7 +223,7 @@ class ActionGreetUser(Action):
         
         # Debugging: Print the current intent and slots
         print(f"DEBUG: Current intent is: {tracker.latest_message['intent']['name']}")
-        print(f"DEBUG: Slots before action: {tracker.current_slot_values()}")
+        # print(f"DEBUG: Slots before action: {tracker.current_slot_values()}")
         
         name = tracker.get_slot('name')
 
@@ -204,7 +233,7 @@ class ActionGreetUser(Action):
             dispatcher.utter_message(response="utter_ask_name")
 
         # Debugging: Print the slots after action
-        print(f"DEBUG: Slots after action: {tracker.current_slot_values()}")
+        # print(f"DEBUG: Slots after action: {tracker.current_slot_values()}")
 
         return [SlotSet("name", name)]
 
@@ -289,110 +318,174 @@ class ActionSubmitNewSeasonProductsForm(Action):
 
 
 
-class ActionFindProductLocation(Action):
+class ActionFindProductLocationKoctas(Action):
 
 
     def name(self) -> Text:
 
-        return "action_find_product_location"
+        return "action_find_product_location_koctas"
 
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        product = tracker.get_slot('product')
-        color = tracker.get_slot('color')
-        kesim = tracker.get_slot('kesim')
-        material = tracker.get_slot('material')
-        size = tracker.get_slot('size')
-        price = tracker.get_slot('price')
-        section_name = tracker.get_slot('section_name')
+        
+        koctas_product = tracker.get_slot('koctas_product')
+        koctas_product_color = tracker.get_slot('koctas_product_color')
+        koctas_product_size = tracker.get_slot('koctas_product_size')
+        koctas_product_weight = tracker.get_slot('koctas_product_weight')
+        koctas_product_price = tracker.get_slot('koctas_product_price')
+        koctas_product_warranty = tracker.get_slot('koctas_product_warranty')
+        koctas_product_campaign = tracker.get_slot('koctas_product_campaign')
+        campaign_ok = tracker.get_slot('campaign_ok')
 
         # Debugging: Print the current slot values
-        print(f"DEBUG: Slots before action: Product: {product}, Color: {color}, Kesim: {kesim}, Material: {material}, Size: {size}, Price: {price}, Section: {section_name}")
+        print(f"DEBUG: Slots before action: Product: {koctas_product}, Color: {koctas_product_color}, Size: {koctas_product_size}, Weight: {koctas_product_weight}, Price: {koctas_product_price}, Warranty: {koctas_product_warranty}, Campaign: {koctas_product_campaign}, Campaign_OK: {campaign_ok}")
 
-        if not section_name:
+        # Check if the essential slot is provided
+        if not koctas_product:
 
-            dispatcher.utter_message(response="utter_ask_section_name")
-            
-            return [FollowupAction(name="action_listen")] # buttons bilgileri alındıktan sonra buraya geri dönülmesini sağlamak için
+            dispatcher.utter_message(text="Lütfen bir ürün adı belirtin.")
+            return []
+
+        if not campaign_ok:
+
+            dispatcher.utter_message(response="utter_ask_koctas_campaign")
+            return [FollowupAction(name="action_listen")]
+
+        # Convert campaign_ok to a boolean value for the query
+        if campaign_ok.lower() == 'evet':
+
+            koctas_product_campaign = True
+
+        else:
+
+            koctas_product_campaign = False
+
 
         try:
 
             client = MongoClient('localhost', 27017)
-            db = client.store
+            db = client.home_store
             sections = db.sections
 
+            # Build the query
             query = {
-                'name': section_name,
-                'aisles.shelves.shelves.sections.product_category': product.capitalize() if product else None,
-                'aisles.shelves.shelves.sections.product.renk': color if color else None,
-                'aisles.shelves.shelves.sections.product.kesim': kesim if kesim else None,
-                'aisles.shelves.shelves.sections.product.kumaş': material if material else None,
-                'aisles.shelves.shelves.sections.product.beden': size if size else None,
-                'aisles.shelves.shelves.sections.product.fiyat': price if price else None,
+                'aisles.shelves.shelves.product_category': koctas_product.capitalize() if koctas_product else None,
             }
 
-            query = {k: v for k, v in query.items() if v is not None}
+            # Add optional criteria if provided
+            if koctas_product_color:
+                query['aisles.shelves.shelves.product.renk'] = koctas_product_color.lower()
+
+            if koctas_product_size:
+                query['aisles.shelves.shelves.product.boyut'] = koctas_product_size
+
+            if koctas_product_weight:
+                query['aisles.shelves.shelves.product.ağırlık'] = koctas_product_weight
+
+            if koctas_product_price:
+                query['aisles.shelves.shelves.product.fiyat'] = koctas_product_price
+
+            if koctas_product_warranty:
+                query['aisles.shelves.shelves.product.garanti'] = koctas_product_warranty
+
+            query['aisles.shelves.shelves.product.kampanyali'] = koctas_product_campaign
+
             print(f"DEBUG: MongoDB query: {query}")
 
             pipeline = [
-                { '$match': {'name': section_name} },
                 { '$unwind': '$aisles' },
                 { '$unwind': '$aisles.shelves' },
                 { '$unwind': '$aisles.shelves.shelves' },
-                { '$unwind': '$aisles.shelves.shelves.sections' },
                 { '$match': query },
                 { '$project': {
                     'section_name': '$name',
-                    'aisle_num': '$aisles.aisle_num',
-                    'side': '$aisles.shelves.side',
-                    'shelf_num': '$aisles.shelves.shelves.shelf_num',
-                    'product': '$aisles.shelves.shelves.sections.product'
+                    'aisle_num': '$aisles.koctas_aisle_num',
+                    'side': '$aisles.shelves.koctas_side',
+                    'shelf_num': '$aisles.shelves.shelves.koctas_shelf_num',
+                    'product_category': '$aisles.shelves.shelves.product_category',
+                    'product': '$aisles.shelves.shelves.product'
                 }}
             ]
 
+            print(f"DEBUG: MongoDB pipeline: {pipeline}")
+
             results = list(sections.aggregate(pipeline))
+
+            print(f"DEBUG: MongoDB results: {results}")
 
             if not results:
 
                 dispatcher.utter_message(text="Üzgünüm, aradığınız özelliklerde bir ürün bulamadım.")
-                return []
+                
+                return [
+                    SlotSet("koctas_product", None),
+                    SlotSet("koctas_product_color", None),
+                    SlotSet("koctas_product_size", None),
+                    SlotSet("koctas_product_weight", None),
+                    SlotSet("koctas_product_price", None),
+                    SlotSet("koctas_product_warranty", None),
+                    SlotSet("koctas_product_campaign", None),
+                    SlotSet("campaign_ok", None)
+                ]
 
             locations = []
 
             for result in results:
+               
+                product_category = result['product_category']
+                product_details = result['product']
 
-                location = {
-                    'section_name': result['section_name'],
-                    'aisle_num': result['aisle_num'],
-                    'side': result['side'],
-                    'shelf_num': result['shelf_num']
-                }
-                locations.append(location)
+                if isinstance(product_details, list):
+                    
+                    for product in product_details:
+                        
+                        if not koctas_product_color or (product_category and product['renk'] == koctas_product_color.lower()):
+                           
+                            location = {
+                                'section_name': result['section_name'],
+                                'aisle_num': result['aisle_num'],
+                                'side': result['side'],
+                                'shelf_num': result['shelf_num']
+                            }
+                            locations.append(location)
+                
+                else:
+                    
+                    if not koctas_product_color or (product_category and product_details['renk'] == koctas_product_color.lower()):
+                    
+                        location = {
+                            'section_name': result['section_name'],
+                            'aisle_num': result['aisle_num'],
+                            'side': result['side'],
+                            'shelf_num': result['shelf_num']
+                        }
+                        locations.append(location)
 
             if locations:
-
+                
                 for location in locations:
-
+                    
                     dispatcher.utter_message(text=f"Aradığınız ürün {location['section_name']} reyonunda, {location['aisle_num']} koridorunda, {location['side']} tarafında, {location['shelf_num']} rafında bulunuyor.")
-            
+           
             else:
-
+              
                 dispatcher.utter_message(text="Üzgünüm, aradığınız özelliklerde bir ürün bulamadım.")
 
         except Exception as e:
-
+           
             dispatcher.utter_message(text=f"Veritabanı sorgusu sırasında bir hata oluştu: {e}")
 
         # Debugging: Print the current slot values after action
-        print(f"DEBUG: Slots after action: Product: {product}, Color: {color}, Kesim: {kesim}, Material: {material}, Size: {size}, Price: {price}, Section: {section_name}")
+        print(f"DEBUG: Slots after action: Product: {koctas_product}, Color: {koctas_product_color}, Size: {koctas_product_size}, Weight: {koctas_product_weight}, Price: {koctas_product_price}, Warranty: {koctas_product_warranty}, Campaign: {koctas_product_campaign}")
 
+        # slotları sonraki ürün sorgularında yanlış bilgi verilmemesi açısından temizliyoruz
         return [
-            SlotSet("product", product),
-            SlotSet("color", color),
-            SlotSet("kesim", kesim),
-            SlotSet("material", material),
-            SlotSet("size", size),
-            SlotSet("price", price),
-            SlotSet("section_name", section_name)
+            SlotSet("koctas_product", None),
+            SlotSet("koctas_product_color", None),
+            SlotSet("koctas_product_size", None),
+            SlotSet("koctas_product_weight", None),
+            SlotSet("koctas_product_price", None),
+            SlotSet("koctas_product_warranty", None),
+            SlotSet("koctas_product_campaign", None),
+            SlotSet("campaign_ok", None)
         ]

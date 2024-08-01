@@ -1,15 +1,10 @@
 version: "3.1"
 
 stories:
-- story: Respond with favorite color for product
-  steps:
-  - intent: ask_product_color
-  - action: action_favorite_color
 
 - story: Greet and ask for user's name
   steps:
   - intent: greet
-  - action: utter_greet
   - action: utter_ask_name
   - intent: inform_name
   - action: action_greet_user
@@ -21,68 +16,32 @@ stories:
   - intent: inform_mood
   - action: action_clothing_advice
 
-- story: respond the best language question
+- story: respond the best mall question
   steps:
-  - intent: ask_best_proglang
-  - action: utter_best_language
-
-- story: happy path
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - action: utter_ask_name
-  - intent: inform_name
-  - action: action_greet_user
-  - intent: mood_great
-  - action: utter_happy
-
-- story: sad path 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - action: utter_ask_name
-  - intent: inform_name
-  - action: action_greet_user
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-
-- story: sad path 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - action: utter_ask_name
-  - intent: inform_name
-  - action: action_greet_user
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
+  - intent: ask_best_mall
+  - action: utter_best_mall
 
 - story: Yeni sezon ürünleri bilgisi alma
   steps:
   - intent: request_new_season_products
   - action: new_season_products_form
   - active_loop: new_season_products_form
-  - intent: inform
+  - intent: inform_new_season_products
     entities:
       - product: "pantolon"
   - action: new_season_products_form
   - active_loop: new_season_products_form
-  - intent: inform
+  - intent: inform_new_season_products
     entities:
       - size: "large"
   - action: new_season_products_form
   - active_loop: new_season_products_form
-  - intent: inform
+  - intent: inform_new_season_products
     entities:
       - color: "beyaz"
   - action: new_season_products_form
   - active_loop: new_season_products_form
-  - intent: inform
+  - intent: inform_new_season_products
     entities:
       - material: "pamuklu"
   - action: new_season_products_form
@@ -92,9 +51,15 @@ stories:
   - intent: affirm
   - action: utter_thanks
 
-- story: find product location
+- story: find product location in koctas
   steps:
-  - intent: ask_product_location
-  - action: action_find_product_location
+  - intent: ask_product_location_koctas
+  - action: action_find_product_location_koctas
   - slot_was_set:
-      - section_name: "erkek"
+      - campaign_ok: "evet"
+
+- story: Handle empty message
+  steps:
+    - intent: empty_message
+    - action: action_listen_for_non_empty_message
+

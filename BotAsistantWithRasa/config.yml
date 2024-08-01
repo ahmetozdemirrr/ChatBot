@@ -46,3 +46,25 @@ policies: null
 #     max_history: 5
 #     epochs: 100
 #     constrain_similarities: true
+
+# Add logging configuration
+# logging:
+#   version: 1
+#   disable_existing_loggers: false
+#   formatters:
+#     simple:
+#       format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+#   handlers:
+#     console:
+#       class: logging.StreamHandler
+#       formatter: simple
+#       level: "DEBUG"
+#   root:
+#     level: "DEBUG"
+#     handlers: ["console"]
+#   loggers:
+#     rasa:
+#       level: "DEBUG"
+#     rasa_sdk:
+#       level: "DEBUG"
+      

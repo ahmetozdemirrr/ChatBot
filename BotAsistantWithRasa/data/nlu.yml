@@ -1,6 +1,64 @@
 version: "3.1"
 
 nlu:
+- regex: koctas_product
+  examples: |
+    - Koltuk
+    - Sandalye
+    - Perde 
+    - Yatak
+    - Lamba
+    - Kapı
+
+- regex: koctas_product_weight
+  examples: |
+    - 10
+    - 20
+    - 30
+    - 40
+    - 50
+
+- regex: koctas_product_size
+  examples: |
+    - 100x200 
+    - 150x200
+    - 200x200
+    - 250x200
+    - 300x200
+
+- regex: koctas_product_price
+  examples: |
+    - 100
+    - 200
+    - 300
+    - 400
+    - 500
+
+- regex: koctas_product_warranty
+  examples: |
+    - 1 yıl garanti
+    - 2 yıl garanti
+    - 3 yıl garanti
+    - 5 yıl garanti
+    - yok
+
+- regex: koctas_product_campaign
+  examples: |
+    - kampanyalı
+    - kampanyasız
+
+- regex: koctas_product_color
+  examples: |
+    - kırmızı
+    - sarı
+    - mavi
+    - siyah
+    - beyaz
+    - mor
+    - yeşil
+    - ekru
+    - bej
+    - kahverengi
 
 - regex: product
   examples: |
@@ -79,19 +137,6 @@ nlu:
     - odunsu
     - baharatlı
 
-- intent: ask_product_color
-  examples: |
-    - Which color is most preferred for [T-Shirt](product)?
-    - Which color is really most preferred for [T-Shirt](product)?
-    - What is the favorite color for [Pantolon](product)?
-    - What is the most favorite color for [Pantolon](product)?
-    - Tell me the favorite color for [Ceket](product)
-    - Tell me the most favorite color for [Ceket](product)
-    - What is the most popular color for [Elbise](product)?
-    - What is the most popular color for this [Elbise](product)?
-    - Which color do people like most for [Gömlek](product)?
-    - Which best color do people like most for [Gömlek](product)?
-
 - intent: ask_clothing_advice
   examples: |
     - Help me with my outfit
@@ -108,58 +153,41 @@ nlu:
     - I am nervous
     - I am calm
 
-- intent: inform_name
-  examples: |
-    - My name is [John](name)
-    - It's [Alice](name)
-    - Call me [Bob](name)
-    - I am [Charlie](name)
-    - [Eve](name)
-    - My name is [Ahmet](name)
-    - I am [Esma](name)
-    - It's [David](name)
-    - Call me [Nina](name)
-    - [Sarah](name)
-        
-- intent: ask_best_proglang
-  examples: |
-    - What is the best programming language?
-    - which programming language is the best?
-    - What is the top programming language?
-
 - intent: greet
   examples: |
-    - hey
+    - Selam
+    - Merhaba
+    - Selamun Aleyküm
+    - Günaydın
+    - İyi günler
+    - Hey
+    - Robot!
+    - Haydi bakalım
+    - Canım
+    - İyi akşamlar
+    - İyi geceler
     - hello
     - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
 
 - intent: goodbye
   examples: |
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
+    - görüşürüz
     - bye bye
-    - see you later
+    - daha sonra görüşürüz
+    - iyi günler
+    - iyi geceler
+    - bay
 
 - intent: affirm
   examples: |
     - yes
     - evet
+    - e 
+    - tabii ki 
+    - hıhı
+    - iyi 
+    - okey
+    - doğru
     - y
     - indeed
     - of course
@@ -171,70 +199,63 @@ nlu:
     - no
     - hayır
     - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - asla 
+    - düşünmmüyorum
+    - bu şekilde değil
+    - böyle değil
 
-- intent: mood_great
+- intent: inform_name
   examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
+    - Adım [Esma Nur](name)
+    - Adım [Esma](name)
+    - Ben [Ahmet Renas](name)
+    - Ben [Ahmet](name)
+    - [Ali Osman](name) diyebilirsin
+    - [Ali](name) diyebilirsin
+    - [Bob](name) diyebilirsin bana
+    - [Bob Will](name) diyebilirsin bana
+    - Bendeniz [Charlie](name)
+    - Bendeniz [Charlie Chaplin](name)
+    - [Eve](name)
+    - [Eve Greath](name)
+    - Benim ismim [Ahmet](name)
+    - Benim ismim [Ahmet Özdemir](name)
 
-- intent: mood_unhappy
+- intent: ask_best_mall
   examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
-
-- intent: bot_challenge
-  examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
+    - En iyi ev malzemesi satan kurum hangisidir?
+    - Evim için nereden alışveriş yapmalıyım?
+    - Evimi yenileyeceğim nereden alışveriş yapmalıyım?
+    - Nereden [Koltuk](koctas_product) almalıyım?
 
 - intent: request_new_season_products
   examples: |
-    - yeni sezon ürünleri hakkında bilgi almak istiyorum
-    - yeni sezon ürünleri var mı?
-    - yeni sezon ürünleri nelerdir?
+    - Yeni sezon ürünleri hakkında bilgi almak istiyorum
+    - Yeni sezon ürünleri var mı?
+    - Yeni sezon ürünleri nelerdir?
 
-- intent: inform
+- intent: inform_new_season_products
   examples: |
-    - [tişört](product) arıyorum
+    - [Koltuk](koctas_product) arıyorum
     - [Medium](size) beden
     - [siyah](color) ve [beyaz](color)
     - [pamuklu](material) olsun lütfen
 
-- intent: ask_product_location
+- intent: ask_product_location_koctas
   examples: |
-    - [mavi](color) renginde [bol](kesim) kesim [pamuk](material) kumaşlı [medium](size) beden [pantolon](product) [erkek](section_name) nerede?
-    - [kadın](section_name) reyonundaki [bol](kesim) kesim [kırmızı](color) [pamuk](material) [pantolon](product) nerede bulabilirim?
-    - [siyah](color) [polyester](material) [jean](product) nerede?
-    - [beyaz](color) [dar](kesim) [keten](material) [gömlek](product) nerede bulunur?
-    - [kırmızı](color) [dar](kesim) [polyester](material) kumaşlı [large](size) beden [tişört](product) nerede?
+    - [Koltuk](koctas_product) takımları nerede?
+    - [Kahverengi](koctas_product_color) [Koltuk](koctas_product) takımları nerede?
+    - [Kahverengi](koctas_product_color) [Koltuk](koctas_product) takımları hangi tarafta?
+    - [Kahverengi](koctas_product_color) [Koltuk](koctas_product) takımlarına nasıl ulaşabilirim?
+    - [Kahverengi](koctas_product_color) [Koltuk](koctas_product) takımlarını bulmama yardımcı olabilir misin?
+    - [150x200](koctas_product_size) boyutlarında [Koltuk](koctas_product) takımları nerede?
+    - [2 yıl](koctas_product_warranty) garantili [Koltuk](koctas_product) takımları nerede?
+    - [Kampanyalı](koctas_product_campaign) [Koltuk](koctas_product) takımları nerede?
+    - [50](koctas_product_weight) ağırlığında [Koltuk](koctas_product) takımları nerede?
+
+- intent: empty_message
+  examples: |
+    - ""
+    - " "
+    - "   "
+
