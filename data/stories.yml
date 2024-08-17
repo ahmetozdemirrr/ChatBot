@@ -1,0 +1,33 @@
+version: "3.1"
+
+stories:
+
+- story: Greet and ask for user's name
+  steps:
+  - intent: greet
+  - action: utter_ask_name
+  - intent: inform_name
+  - action: action_greet_user
+
+- story: respond the best mall question
+  steps:
+  - intent: ask_best_mall
+  - action: utter_best_mall
+
+- story: find product location in mall
+  steps:
+  - intent: ask_product_location_mall
+  - action: action_find_product_location_mall
+  - slot_was_set:
+      - campaign_ok: "evet"
+
+- story: Handle empty message
+  steps:
+  - intent: empty_message
+  - action: action_listen_for_non_empty_message
+
+- story: Showing a photo
+  steps:
+  - intent: photo_request
+  - action: utter_showing_photo
+  

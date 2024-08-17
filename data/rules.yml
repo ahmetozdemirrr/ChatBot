@@ -1,0 +1,52 @@
+version: "3.1"
+
+rules:
+
+- rule: Ask for mood before giving clothing advice
+  steps:
+  - intent: ask_clothing_advice
+  - action: utter_ask_mood
+      
+- rule: Greet user and ask for name if not known
+  condition:
+  - slot_was_set:
+    - name : null
+  steps:
+  - intent: greet
+  - action: utter_ask_name
+
+- rule: Greet user if name is known
+  condition:
+  - slot_was_set:
+    - name
+  steps:
+  - intent: greet
+  - action: utter_greet_for_known_name
+
+- rule: Respond to name
+  steps:
+  - intent: inform_name
+  - action: action_greet_user
+
+- rule: Best mall center of home
+  steps:
+  - intent: ask_best_mall
+  - action: utter_best_mall
+
+
+- rule: Find product location in mall
+  steps:
+  - intent: ask_product_location_mall
+  - action: action_find_product_location_mall
+  - slot_was_set:
+      - campaign_ok
+
+- rule: Handle empty messages
+  steps:
+  - intent: empty_message
+  - action: action_listen_for_non_empty_message
+
+- rule: Show a photo
+  steps:
+  - intent: photo_request
+  - action: utter_showing_photo

@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+
+
+  rasa:
+
+    image: rasa/rasa:latest
+
+    ports:
+      - "${RASA_PORT}:${RASA_PORT}"
+
+    command:
+      - run
+      - --enable-api
+      - --cors
+      - '*'
+      - --port
+      - "${RASA_PORT}"
+      - --endpoints
+      - /app/endpoints.yml
+
+    volumes:
+      - ./models:/app/models
+      - ./endpoints.yml:/app/endpoints.yml
+
+    depends_on:
+      - action_server
+      - redis
+
+
+  action_server:
+
+    build:
+      context: .
+      dockerfile: Dockerfile.actions
+
+    volumes:
+      - ./actions:/app/actions
+
+    ports:
+      - "${ACTION_SERVER_PORT}:${ACTION_SERVER_PORT}"
+
+    command: ["start", "--actions", "actions"]
+
+
+  flask:
+
+    build:
+      context: .
+      dockerfile: Server/Dockerfile
+
+    ports:
+      - "${FLASK_PORT}:${FLASK_PORT}"
+
+    environment:
+      - FLASK_PORT=${FLASK_PORT}
+
+    volumes:
+      - ./Server/templates:/app/templates
+      - ./static:/app/static # fotoğrafın olduğu dizin volume olarak eklenmeli
+
+    depends_on:
+      - rasa
+
+
+  redis:
+
+    image: "redis:alpine"
+
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+
