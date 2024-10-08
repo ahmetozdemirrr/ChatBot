@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
 
     private void sendMessageToBot(String message)
     {
-        String url = "http://192.168.104.172:5005/webhooks/rest/webhook"; // IP adresinizi burada kullanın
+        String url = "LOCAL_IP_ADDRESS"; // IP adresinizi burada kullanın...
         JSONObject jsonBody = new JSONObject();
 
         try
